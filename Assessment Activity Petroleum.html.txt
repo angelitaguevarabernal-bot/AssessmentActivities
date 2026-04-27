@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLIL Science Assessment: Oil and Petroleum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .option-btn { transition: all 0.2s ease; }
+        .option-btn:hover:not(:disabled) { transform: scale(1.01); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
+
+    <!-- Main Container -->
+    <main id="app" class="max-w-4xl mx-auto p-4 py-8">
+        <!-- Content will be injected here by JavaScript -->
+    </main>
+
+    <script>
+        // Quiz Data integrating EIA Content + Gottlieb & Lin Frameworks
+        const questions = [
+            {
+                gottlieb: "Recount", lin: "Word Level", icon: "🛢️",
+                question: "Based on its historical origins, what does the word 'petroleum' literally mean?",
+                options: [
+                    "A) Fossil fuel",
+                    "B) Rock oil",
+                    "C) Marine liquid",
+                    "D) Black gold"
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Describe", lin: "Word Level", icon: "💧",
+                question: "Which vocabulary term best describes the unrefined, natural liquid pumped directly out of the ground?",
+                options: [
+                    "A) Distillate fuel",
+                    "B) Crude oil",
+                    "C) Petrochemical feedstock",
+                    "D) Hydrocarbon gas"
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Explain", lin: "Word Level", icon: "🔬",
+                question: "What is the scientific term for the chemical compounds made of hydrogen and carbon that form the basis of crude oil?",
+                options: [
+                    "A) Carbohydrates",
+                    "B) Hydrocarbons",
+                    "C) Diatoms",
+                    "D) Polymers"
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Recount", lin: "Sentence Level", icon: "🦕",
+                question: "Which sentence uses the correct academic sequence to recount how crude oil was formed?",
+                options: [
+                    "A) Dinosaurs compressed sand and rock over millions of years to produce oil.",
+                    "B) Refineries heated marine organisms until they turned into liquid fossil fuels.",
+                    "C) Remains of ancient marine plants and animals were covered by rock and subjected to heat and pressure over millions of years.",
+                    "D) Hydrocarbons rained down on ancient oceans and were trapped in tar sands."
+                ],
+                correct: 2
+            },
+            {
+                gottlieb: "Explain", lin: "Sentence Level", icon: "📈",
+                question: "Why does a 42-gallon barrel of crude oil yield about 45 gallons of petroleum products?",
+                options: [
+                    "A) Because water is added during the refining process to increase the liquid volume.",
+                    "B) Because of refinery processing gain, where the separation process decreases density and increases volume.",
+                    "C) Because heavy crude oil naturally expands when it is exposed to oxygen in the air.",
+                    "D) Because transportation adds oxygen to the fuel, making it larger."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Describe", lin: "Sentence Level", icon: "🚗",
+                question: "Which sentence accurately describes the primary consumption of petroleum in the United States using academic language?",
+                options: [
+                    "A) Cars use the most oil because everyone drives a lot.",
+                    "B) The transportation sector accounts for the largest share of petroleum consumption, primarily utilizing gasoline and diesel.",
+                    "C) Industrial factories consume 66% of all petroleum to make plastics and solvents.",
+                    "D) Petroleum is mostly consumed by residential buildings for heating purposes."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Discuss", lin: "Word Level", icon: "🧴",
+                question: "When discussing industrial applications, the petrochemical industry uses petroleum as a 'feedstock.' What does this mean it produces?",
+                options: [
+                    "A) Food for marine life",
+                    "B) Lubricants for heavy machinery",
+                    "C) Plastics, polyurethane, and solvents",
+                    "D) Asphalt and road oil"
+                ],
+                correct: 2
+            },
+            {
+                gottlieb: "Argue", lin: "Sentence Level", icon: "📡",
+                question: "Which sentence presents the strongest evidence to argue that technology can reduce the environmental impact of oil exploration?",
+                options: [
+                    "A) Exploring for oil usually disturbs marine ecosystems and harms wildlife.",
+                    "B) Refineries produce gasoline and diesel fuel which pollute the air.",
+                    "C) Technologies like 3-D seismic imaging and directional drilling allow for the discovery and extraction of oil with fewer exploratory wells.",
+                    "D) Oil spills are rare because ships are built with double hulls to protect the ocean."
+                ],
+                correct: 2
+            },
+            {
+                gottlieb: "Discuss", lin: "Sentence Level", icon: "⚖️",
+                question: "When discussing the physical characteristics of crude oil, how do refineries treat 'heavy' crude compared to 'light' crude?",
+                options: [
+                    "A) Heavy crude requires additional, more expensive processing to produce high-value products like gasoline.",
+                    "B) Heavy crude is easily transformed into jet fuel using simple distillation.",
+                    "C) Light crude is only used for asphalt, while heavy crude is used for electricity.",
+                    "D) Both heavy and light crude are processed exactly the same way using identical machinery."
+                ],
+                correct: 0
+            },
+            {
+                gottlieb: "Explain", lin: "Text Level", icon: "🏭",
+                question: "Read the following steps: 1. Extraction, 2. _______, 3. Distribution to consumers. Which text block best explains the missing step?",
+                options: [
+                    "A) Transportation: moving crude oil across oceans using supertankers.",
+                    "B) Refining: utilizing distillation and chemical processing to separate crude oil into usable products like gasoline.",
+                    "C) Combustion: burning the fossil fuels in engines to generate mechanical power.",
+                    "D) Sedimentation: compressing ancient organisms under layers of silt and rock."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Argue", lin: "Text Level", icon: "🌍",
+                question: "Which paragraph structure is most appropriate to argue the dual nature of petroleum use?",
+                options: [
+                    "A) A sequence of dates showing when oil was discovered, followed by a list of oil companies.",
+                    "B) An introduction stating petroleum's necessity for modern life, a paragraph on its economic benefits, and a contrasting paragraph detailing environmental risks like emissions.",
+                    "C) A descriptive list of all the products made from crude oil, ranked from most to least expensive.",
+                    "D) A short story recounting the daily life of an oil rig worker."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Describe", lin: "Text Level", icon: "📊",
+                question: "If you were writing a descriptive expository text about petroleum products, which text structure would most effectively categorize the information?",
+                options: [
+                    "A) A chronological timeline of when each fuel was invented.",
+                    "B) A classification structure grouping products into transportation fuels, heating oils, and petrochemical feedstocks.",
+                    "C) A problem-solution essay focusing only on alternative energy sources.",
+                    "D) A narrative detailing the journey of a single drop of oil."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Explain", lin: "Sentence Level", icon: "💨",
+                question: "Choose the sentence that uses the correct cause-and-effect grammar to explain an environmental consequence of oil.",
+                options: [
+                    "A) Petroleum products make life easier, but we use a lot of gasoline.",
+                    "B) Although petroleum is highly useful, the combustion of these fossil fuels results in the emission of carbon dioxide.",
+                    "C) Oil is drilled from the ground and then it is sent to refineries.",
+                    "D) Because petroleum is a rock oil, therefore it is very heavy."
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Recount", lin: "Text Level", icon: "⏳",
+                question: "In a text designed to recount the geological history of oil formation, which set of transition words establishes the best chronological cohesion?",
+                options: [
+                    "A) First, On the other hand, In conclusion",
+                    "B) Millions of years ago, Subsequently, Over time",
+                    "C) For example, Such as, Including",
+                    "D) Therefore, As a result, Consequently"
+                ],
+                correct: 1
+            },
+            {
+                gottlieb: "Discuss", lin: "Text Level", icon: "🌱",
+                question: "Which paragraph best synthesizes the discussion between meeting global energy demand and environmental stewardship?",
+                options: [
+                    "A) The world needs more oil than ever. We should drill everywhere to ensure gasoline prices stay low for everyone.",
+                    "B) While transitioning to renewable energy is crucial for reducing emissions, petroleum currently remains vital for fulfilling global transportation and industrial demands.",
+                    "C) Fossil fuels are terrible for the environment and should be completely banned tomorrow to stop climate change immediately.",
+                    "D) Refineries process 42 gallons of crude into 45 gallons of products. This increase is called processing gain."
+                ],
+                correct: 1
+            }
+        ];
+
+        // App State
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let score = 0;
+
+        // DOM Elements
+        const app = document.getElementById('app');
+
+        // Render Functions
+        function renderIntro() {
+            app.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-8 fade-in border-t-8 border-blue-600">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-4">🧪 CLIL Science Assessment</h1>
+                    <h2 class="text-xl text-blue-600 font-semibold mb-6">Topic: Oil and Petroleum Explained</h2>
+                    
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8 border border-blue-100">
+                        <h3 class="text-lg font-bold text-blue-800 mb-3">🎯 Learning Intentions</h3>
+                        <p class="mb-4 text-gray-700">Welcome, students! This interactive questionnaire assesses your understanding of our reading on the origins, refining, and impacts of petroleum. We are measuring both your <strong>Science Content</strong> and your <strong>Academic Language</strong>.</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">📚 Content Focus</h4>
+                                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                                    <li>Geological formation of crude oil</li>
+                                    <li>The refining process and outputs</li>
+                                    <li>Primary uses (transportation, industrial)</li>
+                                    <li>Environmental impacts and technological solutions</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">🗣️ Language Focus</h4>
+                                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                                    <li><strong>Word Level:</strong> Master key scientific vocabulary (hydrocarbons, crude, feedstock).</li>
+                                    <li><strong>Sentence Level:</strong> Use grammar for cause/effect (results in) and comparison.</li>
+                                    <li><strong>Text Level:</strong> Recognize expository, sequential, and argumentative structures.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-gray-500 italic">Frameworks applied: Margo Gottlieb (Describe, Explain, Argue, Discuss, Recount) & Angel Lin (Word, Sentence, Text levels).</p>
+                    </div>
+
+                    <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition duration-200 shadow-md text-lg">
+                        Start Questionnaire 🚀
+                    </button>
+                </div>
+            `;
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers.fill(null);
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                const isSelected = userAnswers[currentQuestionIndex] === idx;
+                const baseClass = "option-btn w-full text-left p-4 rounded-lg border-2 mb-3 text-gray-700 font-medium";
+                const selectedClass = isSelected ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white hover:border-blue-300";
+                
+                optionsHtml += `
+                    <button onclick="selectAnswer(${idx})" class="${baseClass} ${selectedClass}">
+                        ${opt}
+                    </button>
+                `;
+            });
+
+            app.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-8 fade-in">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                        <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: ${progress}%"></div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Question ${currentQuestionIndex + 1} of ${questions.length}</span>
+                        <div class="flex space-x-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-3 py-1 rounded-full font-semibold border border-indigo-200">${q.gottlieb}</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-3 py-1 rounded-full font-semibold border border-emerald-200">${q.lin}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start mb-8">
+                        <div class="text-4xl mr-4 bg-slate-100 p-3 rounded-xl">${q.icon}</div>
+                        <h2 class="text-xl font-bold text-gray-800 leading-relaxed">${q.question}</h2>
+                    </div>
+
+                    <div class="mb-8">
+                        ${optionsHtml}
+                    </div>
+
+                    <div class="flex justify-between items-center border-t pt-6">
+                        <button onclick="prevQuestion()" class="px-6 py-2 rounded-lg font-semibold text-gray-600 hover:bg-gray-100 transition ${currentQuestionIndex === 0 ? 'invisible' : ''}">
+                            &larr; Previous
+                        </button>
+                        
+                        <button id="nextBtn" onclick="nextQuestion()" disabled class="px-8 py-3 rounded-lg font-bold text-white transition bg-gray-300 cursor-not-allowed">
+                            ${currentQuestionIndex === questions.length - 1 ? 'Submit Assessment' : 'Next Question &rarr;'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Enable next button if an answer is already selected (when going back)
+            if (userAnswers[currentQuestionIndex] !== null) {
+                enableNextButton();
+            }
+        }
+
+        function selectAnswer(idx) {
+            userAnswers[currentQuestionIndex] = idx;
+            renderQuestion(); // Re-render to show selected state
+            enableNextButton();
+        }
+
+        function enableNextButton() {
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = false;
+            btn.classList.remove('bg-gray-300', 'cursor-not-allowed');
+            if (currentQuestionIndex === questions.length - 1) {
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
+            } else {
+                btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                calculateScore();
+                renderResults();
+            }
+        }
+
+        function calculateScore() {
+            score = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === questions[idx].correct) {
+                    score++;
+                }
+            });
+        }
+
+        function renderResults() {
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            // Academic Feedback Logic
+            let feedbackTitle = "";
+            let feedbackText = "";
+            let feedbackColor = "";
+
+            if (score >= 13) {
+                feedbackTitle = "Outstanding Integration of Content & Language!";
+                feedbackColor = "text-green-600";
+                feedbackText = `
+                    <p class="mb-2"><strong>Excellent work!</strong> You have demonstrated a strong command of both the scientific content regarding petroleum and the academic language required to express it.</p>
+                    <p><strong>Language Feedback:</strong> Your ability to comprehend complex sentence structures (like cause/effect) and identify text-level genres (argumentative, expository) is outstanding. Keep using precise vocabulary like <em>"hydrocarbons"</em> and sophisticated transition words in your own scientific writing!</p>
+                `;
+            } else if (score >= 8) {
+                feedbackTitle = "Good Progress in Scientific Literacy!";
+                feedbackColor = "text-blue-600";
+                feedbackText = `
+                    <p class="mb-2"><strong>Good job!</strong> You have a solid grasp of the basic vocabulary (word level) and the core concepts of petroleum extraction and use.</p>
+                    <p><strong>Language Feedback:</strong> To strengthen your academic language further, pay close attention to <em>Sentence Level</em> grammar. Notice how the passive voice is used to describe scientific processes (e.g., "is refined"), and practice building complex sentences that link causes to their environmental effects.</p>
+                `;
+            } else {
+                feedbackTitle = "Let's Review Content & Language Strategies";
+                feedbackColor = "text-amber-600";
+                feedbackText = `
+                    <p class="mb-2"><strong>Keep practicing!</strong> While you are picking up some of the content, we need to focus on strengthening your academic language to fully understand the science.</p>
+                    <p><strong>Language Feedback:</strong> Let's work on recognizing key scientific vocabulary (Word Level) and understanding how sentences are built. Rereading texts and focusing on sequence words (e.g., <em>First, Subsequently</em>) will help you recount scientific processes more accurately next time.</p>
+                `;
+            }
+
+            // Generate Review List
+            let reviewHtml = '<div class="mt-8 space-y-4">';
+            questions.forEach((q, idx) => {
+                const isCorrect = userAnswers[idx] === q.correct;
+                const icon = isCorrect ? '✅' : '❌';
+                const bgColor = isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+                
+                reviewHtml += `
+                    <div class="p-4 border rounded-lg ${bgColor}">
+                        <p class="font-semibold text-gray-800 text-sm mb-1">
+                            ${icon} Q${idx + 1}: <span class="font-normal text-gray-600">[${q.gottlieb} / ${q.lin}]</span>
+                        </p>
+                        <p class="text-sm text-gray-700">${q.question}</p>
+                        ${!isCorrect ? `<p class="text-sm text-red-600 mt-2"><strong>Correct Answer:</strong> ${q.options[q.correct]}</p>` : ''}
+                    </div>
+                `;
+            });
+            reviewHtml += '</div>';
+
+            app.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-8 fade-in border-t-8 ${score >= 8 ? (score >= 13 ? 'border-green-500' : 'border-blue-500') : 'border-amber-500'}">
+                    <div class="text-center mb-8 border-b pb-8">
+                        <h2 class="text-4xl font-black text-gray-800 mb-2">Your Score: ${score} / ${questions.length}</h2>
+                        <p class="text-xl font-medium text-gray-500">${percentage}% Correct</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-6 mb-8 border border-slate-200">
+                        <h3 class="text-2xl font-bold ${feedbackColor} mb-3">${feedbackTitle}</h3>
+                        <div class="text-gray-700 leading-relaxed">
+                            ${feedbackText}
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <button onclick="document.getElementById('reviewSection').classList.toggle('hidden')" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-3 px-6 rounded-lg transition duration-200">
+                            Toggle Answer Review 📝
+                        </button>
+                        <div id="reviewSection" class="hidden">
+                            ${reviewHtml}
+                        </div>
+                    </div>
+
+                    <button onclick="renderIntro()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition duration-200 shadow-md text-lg">
+                        Return to Start 🔄
+                    </button>
+                </div>
+            `;
+        }
+
+        // Initialize App
+        renderIntro();
+    </script>
+</body>
+</html>
